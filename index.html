@@ -298,12 +298,10 @@
 
         .register-buttons {
             display: flex;
-            gap: 20px;
             justify-content: center;
             align-items: center;
-            min-height: 180px;
+            min-height: 150px;
             position: relative;
-            overflow: visible;
         }
 
         .reg-btn {
@@ -313,7 +311,7 @@
             font-size: 1.1em;
             cursor: pointer;
             font-weight: bold;
-            transition: transform 0.2s, box-shadow 0.2s;
+            white-space: nowrap;
         }
 
         .reg-btn-yes {
@@ -322,17 +320,13 @@
             box-shadow: 0 4px 15px rgba(78, 205, 196, 0.4);
         }
 
-        .reg-btn-yes:hover {
-            transform: scale(1.05);
-            box-shadow: 0 6px 25px rgba(78, 205, 196, 0.6);
-        }
-
         .reg-btn-no {
-            background: rgba(255, 68, 68, 0.2);
-            color: #ff6b6b;
+            background: rgba(255, 68, 68, 0.9);
+            color: #fff;
             border: 1px solid #ff4444;
-            position: absolute;
             transition: none;
+            position: absolute;
+            z-index: 10;
         }
 
         .register-hint {
@@ -391,11 +385,11 @@
                 <span class="field-value">A pulse & mild recklessness</span>
             </div>
             <p class="register-question">Would you like to register for this course?</p>
+            <p class="register-hint" id="registerHint"></p>
             <div class="register-buttons" id="registerButtons">
                 <button class="reg-btn reg-btn-yes" id="regYesBtn" onclick="registerYes()">YES, SIGN ME UP!</button>
                 <button class="reg-btn reg-btn-no" id="regNoBtn" ontouchstart="runAway(event)" onmouseover="runAway(event)" onclick="runAway(event)">No thanks</button>
             </div>
-            <p class="register-hint" id="registerHint"></p>
         </div>
     </div>
 
@@ -511,18 +505,17 @@
             runAwayCount++;
 
             if (runAwayCount > 8) {
+                document.getElementById('regYesBtn').style.display = 'none';
                 btn.textContent = "OK FINE, YES!";
                 btn.style.background = 'linear-gradient(135deg, #4ecdc4, #44bd63)';
                 btn.style.color = '#fff';
                 btn.style.border = 'none';
-                btn.style.position = 'relative';
-                btn.style.left = 'auto';
-                btn.style.top = 'auto';
-                btn.style.transform = 'none';
+                btn.style.position = 'static';
                 btn.style.padding = '15px 35px';
                 btn.style.borderRadius = '50px';
                 btn.style.fontSize = '1.1em';
                 btn.style.whiteSpace = 'nowrap';
+                btn.style.boxShadow = '0 4px 15px rgba(78, 205, 196, 0.4)';
                 btn.onmouseover = null;
                 btn.ontouchstart = null;
                 btn.onclick = registerYes;
