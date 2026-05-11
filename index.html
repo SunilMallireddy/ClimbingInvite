@@ -321,9 +321,9 @@
         }
 
         .reg-btn-no {
-            background: rgba(255, 68, 68, 0.9);
+            background: rgba(0, 0, 0, 0.35);
             color: #fff;
-            border: 1px solid #ff4444;
+            border: 1px solid rgba(255, 255, 255, 0.3);
             transition: none;
             position: absolute;
             z-index: 10;
@@ -612,44 +612,10 @@
             noCount++;
         }
 
-        // Send time via iMessage and offer calendar invite
+        // Send time via iMessage
         function sendTime(time) {
             const message = `I am in and ${time} works for me`;
-
-            // Generate .ics calendar event
-            const hour = parseInt(time.split(':')[0]);
-            const mins = time.includes('30') ? '30' : '00';
-            const hour24 = time.includes('PM') ? hour + 12 : hour;
-            const startTime = `20260518T${String(hour24).padStart(2,'0')}${mins}00`;
-            const endHour24 = hour24 + 1;
-            const endTime = `20260518T${String(endHour24).padStart(2,'0')}${mins}00`;
-
-            const icsContent = [
-                'BEGIN:VCALENDAR',
-                'VERSION:2.0',
-                'PRODID:-//Climbing//EN',
-                'BEGIN:VEVENT',
-                `DTSTART:${startTime}`,
-                `DTEND:${endTime}`,
-                'SUMMARY:Climbing Session - Wall Crushing 102',
-                'DESCRIPTION:Time to crush blacks! Bring chalk and good vibes.',
-                'LOCATION:Climbing Gym',
-                'END:VEVENT',
-                'END:VCALENDAR'
-            ].join('\r\n');
-
-            // Show the send message button and hide time options
-            const popup = document.getElementById('yesPopup');
-            popup.querySelector('.popup-content').innerHTML = `
-                <div class="popup-emoji">🎉🧗🎉</div>
-                <p>LET'S GOOOOO!</p>
-                <p style="font-size: 0.7em; margin-top: 15px; color: #ccc;">Calendar invite downloading...</p>
-                <a href="sms:+16089825259&body=${encodeURIComponent(message)}" class="time-btn" style="display:inline-block; margin-top:25px; text-decoration:none; font-size:1.2em; padding:15px 30px;">📱 Send Text Message</a>
-            `;
-
-            // Download calendar file
-            const dataUri = 'data:text/calendar;charset=utf-8,' + encodeURIComponent(icsContent);
-            window.open(dataUri);
+            window.location.href = `sms:+16089825259&body=${encodeURIComponent(message)}`;
         }
 
         // Confetti effect
