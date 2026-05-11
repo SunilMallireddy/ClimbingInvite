@@ -515,9 +515,14 @@
                 btn.style.background = 'linear-gradient(135deg, #4ecdc4, #44bd63)';
                 btn.style.color = '#fff';
                 btn.style.border = 'none';
-                btn.style.left = '50%';
-                btn.style.top = '50%';
-                btn.style.transform = 'translate(-50%, -50%)';
+                btn.style.position = 'relative';
+                btn.style.left = 'auto';
+                btn.style.top = 'auto';
+                btn.style.transform = 'none';
+                btn.style.padding = '15px 35px';
+                btn.style.borderRadius = '50px';
+                btn.style.fontSize = '1.1em';
+                btn.style.whiteSpace = 'nowrap';
                 btn.onmouseover = null;
                 btn.ontouchstart = null;
                 btn.onclick = registerYes;
@@ -618,39 +623,36 @@
         function sendTime(time) {
             const message = `I am in and ${time} works for me`;
 
-            // Generate .ics calendar file and download it
+            // Generate .ics calendar event
             const hour = parseInt(time.split(':')[0]);
             const mins = time.includes('30') ? '30' : '00';
             const hour24 = time.includes('PM') ? hour + 12 : hour;
             const startTime = `20260518T${String(hour24).padStart(2,'0')}${mins}00`;
-            const endHour = mins === '30' ? hour24 + 1 : hour24;
-            const endMins = mins === '30' ? '30' : '00';
-            const endTime = `20260518T${String(endHour + 1).padStart(2,'0')}${endMins}00`;
+            const endHour24 = hour24 + 1;
+            const endTime = `20260518T${String(endHour24).padStart(2,'0')}${mins}00`;
 
             const icsContent = [
                 'BEGIN:VCALENDAR',
                 'VERSION:2.0',
+                'PRODID:-//Climbing//EN',
                 'BEGIN:VEVENT',
                 `DTSTART:${startTime}`,
                 `DTEND:${endTime}`,
                 'SUMMARY:Climbing Session - Wall Crushing 102',
                 'DESCRIPTION:Time to crush blacks! Bring chalk and good vibes.',
+                'LOCATION:Climbing Gym',
                 'END:VEVENT',
                 'END:VCALENDAR'
-            ].join('\n');
+            ].join('\r\n');
 
-            const blob = new Blob([icsContent], { type: 'text/calendar' });
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = 'climbing-monday.ics';
-            a.click();
-            URL.revokeObjectURL(url);
+            // Use data URI — works on iOS Safari
+            const dataUri = 'data:text/calendar;charset=utf-8,' + encodeURIComponent(icsContent);
+            window.open(dataUri);
 
-            // Short delay then open Messages
+            // Then open Messages after a delay
             setTimeout(() => {
                 window.location.href = `sms:+16089825259&body=${encodeURIComponent(message)}`;
-            }, 500);
+            }, 1500);
         }
 
         // Confetti effect
