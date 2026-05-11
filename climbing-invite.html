@@ -1,0 +1,671 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>URGENT: Climbing Mission Briefing</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Georgia', serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 40px 20px;
+            overflow-x: hidden;
+        }
+
+        .container {
+            text-align: center;
+            padding: 40px;
+            max-width: 700px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .classified {
+            color: #ff4444;
+            font-size: 14px;
+            letter-spacing: 8px;
+            text-transform: uppercase;
+            border: 2px solid #ff4444;
+            display: inline-block;
+            padding: 5px 20px;
+            margin-bottom: 30px;
+            animation: blink 2s infinite;
+        }
+
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        .mountain {
+            font-size: 120px;
+            margin: 20px 0;
+            animation: bounce 2s ease-in-out infinite;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
+        }
+
+        h1 {
+            color: #fff;
+            font-size: 2.5em;
+            margin: 20px 0;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+        }
+
+        .subtitle {
+            color: #aaa;
+            font-size: 1.1em;
+            margin-bottom: 30px;
+            font-style: italic;
+        }
+
+        .details-box {
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.2);
+            border-radius: 15px;
+            padding: 30px;
+            margin: 30px 0;
+            backdrop-filter: blur(10px);
+        }
+
+        .detail-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 0;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            color: #ddd;
+            font-size: 1.1em;
+        }
+
+        .detail-row:last-child {
+            border-bottom: none;
+        }
+
+        .detail-label {
+            color: #888;
+            text-transform: uppercase;
+            font-size: 0.8em;
+            letter-spacing: 2px;
+        }
+
+        .detail-value {
+            color: #4ecdc4;
+            font-weight: bold;
+            font-size: 1.2em;
+        }
+
+        .reasons {
+            color: #ccc;
+            text-align: left;
+            margin: 30px 0;
+            padding: 20px;
+            background: rgba(78, 205, 196, 0.05);
+            border-left: 3px solid #4ecdc4;
+            border-radius: 0 10px 10px 0;
+        }
+
+        .reasons h3 {
+            color: #4ecdc4;
+            margin-bottom: 15px;
+        }
+
+        .reasons li {
+            margin: 10px 0;
+            padding-left: 10px;
+            line-height: 1.6;
+        }
+
+        .buttons {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            margin-top: 40px;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 15px 40px;
+            border: none;
+            border-radius: 50px;
+            font-size: 1.2em;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .btn-yes {
+            background: linear-gradient(135deg, #4ecdc4, #44bd63);
+            color: #fff;
+            box-shadow: 0 4px 15px rgba(78, 205, 196, 0.4);
+        }
+
+        .btn-yes:hover {
+            transform: scale(1.1);
+            box-shadow: 0 6px 25px rgba(78, 205, 196, 0.6);
+        }
+
+        .btn-no {
+            background: rgba(255,255,255,0.1);
+            color: #888;
+            border: 1px solid #444;
+            font-size: 0.7em;
+            padding: 8px 15px;
+            opacity: 0.5;
+        }
+
+        .btn-no:hover {
+            transform: scale(0.9);
+            opacity: 0.3;
+        }
+
+        .fine-print {
+            color: #555;
+            font-size: 0.7em;
+            margin-top: 30px;
+            font-style: italic;
+        }
+
+        .falling-climber {
+            position: fixed;
+            font-size: 30px;
+            animation: fall linear infinite;
+            opacity: 0.3;
+        }
+
+        @keyframes fall {
+            0% { transform: translateY(-100vh) rotate(0deg); }
+            100% { transform: translateY(100vh) rotate(720deg); }
+        }
+
+        .popup {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.9);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+        }
+
+        .popup-content {
+            text-align: center;
+            color: white;
+            font-size: 2em;
+            padding: 40px;
+        }
+
+        .popup-emoji {
+            font-size: 100px;
+            margin: 20px;
+        }
+
+        .countdown {
+            color: #4ecdc4;
+            font-size: 0.9em;
+            margin-top: 20px;
+            font-family: monospace;
+        }
+
+        /* Registration screen styles */
+        .register-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #0f0f23 0%, #1a1a3e 50%, #0d2847 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 2000;
+            padding: 20px;
+        }
+
+        .register-box {
+            background: rgba(255,255,255,0.03);
+            border: 2px solid rgba(78, 205, 196, 0.3);
+            border-radius: 20px;
+            padding: 50px 40px;
+            max-width: 500px;
+            width: 100%;
+            text-align: center;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+        }
+
+        .register-icon {
+            font-size: 60px;
+            margin-bottom: 20px;
+        }
+
+        .register-title {
+            color: #fff;
+            font-size: 1.5em;
+            margin-bottom: 10px;
+            letter-spacing: 2px;
+        }
+
+        .register-subtitle {
+            color: #888;
+            font-size: 0.9em;
+            margin-bottom: 30px;
+        }
+
+        .register-field {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 0;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .field-label {
+            color: #888;
+            font-size: 0.9em;
+        }
+
+        .field-value {
+            color: #4ecdc4;
+            font-weight: bold;
+        }
+
+        .register-question {
+            color: #fff;
+            font-size: 1.2em;
+            margin: 30px 0 20px;
+        }
+
+        .register-buttons {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            align-items: center;
+            min-height: 180px;
+            position: relative;
+            overflow: visible;
+        }
+
+        .reg-btn {
+            padding: 15px 35px;
+            border: none;
+            border-radius: 50px;
+            font-size: 1.1em;
+            cursor: pointer;
+            font-weight: bold;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .reg-btn-yes {
+            background: linear-gradient(135deg, #4ecdc4, #44bd63);
+            color: #fff;
+            box-shadow: 0 4px 15px rgba(78, 205, 196, 0.4);
+        }
+
+        .reg-btn-yes:hover {
+            transform: scale(1.05);
+            box-shadow: 0 6px 25px rgba(78, 205, 196, 0.6);
+        }
+
+        .reg-btn-no {
+            background: rgba(255, 68, 68, 0.2);
+            color: #ff6b6b;
+            border: 1px solid #ff4444;
+            position: absolute;
+            transition: none;
+        }
+
+        .register-hint {
+            color: #ff6b6b;
+            font-size: 0.85em;
+            margin-top: 20px;
+            min-height: 24px;
+            font-style: italic;
+        }
+
+        .time-options {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            justify-content: center;
+            margin-top: 20px;
+        }
+
+        .time-btn {
+            padding: 12px 25px;
+            border: 2px solid #4ecdc4;
+            border-radius: 30px;
+            background: rgba(78, 205, 196, 0.1);
+            color: #4ecdc4;
+            font-size: 1em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .time-btn:hover {
+            background: linear-gradient(135deg, #4ecdc4, #44bd63);
+            color: #fff;
+            transform: scale(1.1);
+            box-shadow: 0 4px 15px rgba(78, 205, 196, 0.4);
+        }
+    </style>
+</head>
+<body>
+    <!-- OPENING SCREEN: Fake registration form with runaway No button -->
+    <div class="register-screen" id="registerScreen">
+        <div class="register-box">
+            <div class="register-icon">📋</div>
+            <h2 class="register-title">CLIMBING COURSE REGISTRATION</h2>
+            <p class="register-subtitle">Official Registration Portal - Monday, May 18, 2026</p>
+            <div class="register-field">
+                <span class="field-label">Course:</span>
+                <span class="field-value">Wall Crushing 102</span>
+            </div>
+            <div class="register-field">
+                <span class="field-label">Instructor:</span>
+                <span class="field-value">Your friend (me)</span>
+            </div>
+            <div class="register-field">
+                <span class="field-label">Prerequisites:</span>
+                <span class="field-value">A pulse & mild recklessness</span>
+            </div>
+            <p class="register-question">Would you like to register for this course?</p>
+            <div class="register-buttons" id="registerButtons">
+                <button class="reg-btn reg-btn-yes" id="regYesBtn" onclick="registerYes()">YES, SIGN ME UP!</button>
+                <button class="reg-btn reg-btn-no" id="regNoBtn" ontouchstart="runAway(event)" onmouseover="runAway(event)" onclick="runAway(event)">No thanks</button>
+            </div>
+            <p class="register-hint" id="registerHint"></p>
+        </div>
+    </div>
+
+    <div class="container" id="mainContent" style="display:none;">
+        <div class="classified">TOP SECRET - CLIMBING CLEARANCE REQUIRED</div>
+
+        <div class="mountain">🧗</div>
+
+        <h1>You Have Been Summoned<br>To The Wall</h1>
+
+        <p class="subtitle">"The rocks miss you. I can hear them crying." - Ancient Climbing Proverb (made up just now)</p>
+
+        <div class="details-box">
+            <div class="detail-row">
+                <span class="detail-label">Mission Date</span>
+                <span class="detail-value">Monday, May 18, 2026</span>
+            </div>
+            <div class="detail-row">
+                <span class="detail-label">Activity</span>
+                <span class="detail-value">Indoor Climbing</span>
+            </div>
+            <div class="detail-row">
+                <span class="detail-label">Difficulty</span>
+                <span class="detail-value">Maybe you'll crush blacks this time</span>
+            </div>
+            <div class="detail-row">
+                <span class="detail-label">Dress Code</span>
+                <span class="detail-value">Chalk-stained everything</span>
+            </div>
+        </div>
+
+        <div class="reasons">
+            <h3>Top 5 Reasons You Cannot Say No:</h3>
+            <ol>
+                <li>Your forearms are getting suspiciously un-pumped</li>
+                <li>That V3 isn't going to flash itself (or maybe it will, we're humble)</li>
+                <li>We need someone to yell "COME ON!" while we fail at the crux</li>
+                <li>Post-climb tacos taste 847% better when earned</li>
+                <li>Your couch is filing a restraining order against you</li>
+            </ol>
+        </div>
+
+        <div class="countdown" id="countdown"></div>
+
+        <div class="buttons">
+            <button class="btn btn-yes" onclick="sayYes()">I'M IN! 💪</button>
+            <button class="btn btn-no" onclick="sayNo()" id="noBtn">no thanks</button>
+        </div>
+
+        <p class="fine-print">* "No" button has a 94% chance of not working. Terms and conditions: you must send back at least one beta spray per session. Declining may result in being tagged in embarrassing throwback climbing photos.</p>
+    </div>
+
+    <div class="popup" id="yesPopup">
+        <div class="popup-content">
+            <div class="popup-emoji">🎉🧗🎉</div>
+            <p>LET'S GOOOOO!</p>
+            <p style="font-size: 0.7em; margin-top: 15px; color: #ccc;">Pick a time that works for you:</p>
+            <div class="time-options">
+                <button class="time-btn" onclick="sendTime('5:00 PM')">5:00 PM</button>
+                <button class="time-btn" onclick="sendTime('5:30 PM')">5:30 PM</button>
+                <button class="time-btn" onclick="sendTime('6:00 PM')">6:00 PM</button>
+                <button class="time-btn" onclick="sendTime('6:30 PM')">6:30 PM</button>
+                <button class="time-btn" onclick="sendTime('7:00 PM')">7:00 PM</button>
+                <button class="time-btn" onclick="sendTime('7:30 PM')">7:30 PM</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="popup" id="noPopup">
+        <div class="popup-content">
+            <div class="popup-emoji">😢</div>
+            <p id="noMessage"></p>
+        </div>
+    </div>
+
+    <script>
+        // === REGISTRATION SCREEN WITH RUNAWAY "NO" BUTTON ===
+        let runAwayCount = 0;
+        const hints = [
+            "Haha nice try! 😏",
+            "You really thought you could click that? 🏃‍♀️",
+            "The button is faster than you!",
+            "It's literally running for its life!",
+            "Just click YES already! The button agrees!",
+            "You'll never catch it... just give in 🧗",
+            "At this point you're getting a better workout chasing the button than climbing"
+        ];
+
+        function runAway(e) {
+            if (e) {
+                e.preventDefault();
+                e.stopPropagation();
+            }
+
+            const btn = document.getElementById('regNoBtn');
+            const container = document.getElementById('registerButtons');
+            const containerRect = container.getBoundingClientRect();
+
+            const maxX = containerRect.width / 2 - btn.offsetWidth / 2;
+            const maxY = 120;
+
+            const randomX = (Math.random() - 0.5) * maxX * 2;
+            const randomY = (Math.random() - 0.5) * maxY;
+
+            btn.style.position = 'absolute';
+            btn.style.left = `calc(50% + ${randomX}px)`;
+            btn.style.top = `calc(50% + ${randomY}px)`;
+            btn.style.transform = 'translate(-50%, -50%)';
+            btn.style.zIndex = '10';
+
+            const hint = document.getElementById('registerHint');
+            hint.textContent = hints[runAwayCount % hints.length];
+            runAwayCount++;
+
+            if (runAwayCount > 8) {
+                btn.textContent = "OK FINE, YES!";
+                btn.style.background = 'linear-gradient(135deg, #4ecdc4, #44bd63)';
+                btn.style.color = '#fff';
+                btn.style.border = 'none';
+                btn.style.left = '50%';
+                btn.style.top = '50%';
+                btn.style.transform = 'translate(-50%, -50%)';
+                btn.onmouseover = null;
+                btn.ontouchstart = null;
+                btn.onclick = registerYes;
+            }
+        }
+
+        function registerYes() {
+            const screen = document.getElementById('registerScreen');
+            screen.style.transition = 'opacity 0.8s ease, transform 0.8s ease';
+            screen.style.opacity = '0';
+            screen.style.transform = 'scale(1.1)';
+            setTimeout(() => {
+                screen.style.display = 'none';
+                document.getElementById('mainContent').style.display = 'block';
+            }, 800);
+        }
+
+        // Falling climber emojis in background
+        const emojis = ['🧗', '🪨', '🧗‍♂️', '🧗‍♀️', '💪'];
+        for (let i = 0; i < 8; i++) {
+            const el = document.createElement('div');
+            el.className = 'falling-climber';
+            el.textContent = emojis[i % emojis.length];
+            el.style.left = Math.random() * 100 + 'vw';
+            el.style.animationDuration = (Math.random() * 5 + 5) + 's';
+            el.style.animationDelay = (Math.random() * 5) + 's';
+            document.body.appendChild(el);
+        }
+
+        // Countdown to Monday
+        function updateCountdown() {
+            const target = new Date('2026-05-18T09:00:00');
+            const now = new Date();
+            const diff = target - now;
+
+            if (diff <= 0) {
+                document.getElementById('countdown').textContent = "IT'S GO TIME! 🚀";
+                return;
+            }
+
+            const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const mins = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+            const secs = Math.floor((diff % (1000 * 60)) / 1000);
+
+            document.getElementById('countdown').textContent =
+                `⏱️ T-minus ${days}d ${hours}h ${mins}m ${secs}s until send time`;
+        }
+
+        updateCountdown();
+        setInterval(updateCountdown, 1000);
+
+        // Yes button
+        function sayYes() {
+            document.getElementById('yesPopup').style.display = 'flex';
+            confetti();
+        }
+
+        // No button - make it annoying
+        let noCount = 0;
+        const noMessages = [
+            "Hmm, that button doesn't seem to work. Try the green one? 🤔",
+            "ERROR 404: Excuse not found. Try again.",
+            "Your finger slipped, right? RIGHT?!",
+            "The wall is watching. The wall is disappointed.",
+            "Fine. I'll just climb alone. In the rain. Crying. (There's no rain indoors but still.)"
+        ];
+
+        function sayNo() {
+            const btn = document.getElementById('noBtn');
+
+            if (noCount < 4) {
+                document.getElementById('noMessage').textContent = noMessages[noCount];
+                document.getElementById('noPopup').style.display = 'flex';
+                setTimeout(() => {
+                    document.getElementById('noPopup').style.display = 'none';
+                }, 2500);
+
+                // Make the no button smaller/harder to click each time
+                btn.style.fontSize = (parseFloat(btn.style.fontSize || '0.7') - 0.1) + 'em';
+                btn.style.opacity = parseFloat(btn.style.opacity || '0.5') - 0.1;
+            } else {
+                document.getElementById('noMessage').textContent = noMessages[4];
+                document.getElementById('noPopup').style.display = 'flex';
+                setTimeout(() => {
+                    document.getElementById('noPopup').style.display = 'none';
+                    btn.textContent = "ok fine I'll come";
+                    btn.onclick = sayYes;
+                    btn.className = 'btn btn-yes';
+                    btn.style.fontSize = '1.2em';
+                    btn.style.opacity = '1';
+                }, 3000);
+            }
+            noCount++;
+        }
+
+        // Send time via iMessage and offer calendar invite
+        function sendTime(time) {
+            const message = `I am in and ${time} works for me`;
+
+            // Generate .ics calendar file and download it
+            const hour = parseInt(time.split(':')[0]);
+            const mins = time.includes('30') ? '30' : '00';
+            const hour24 = time.includes('PM') ? hour + 12 : hour;
+            const startTime = `20260518T${String(hour24).padStart(2,'0')}${mins}00`;
+            const endHour = mins === '30' ? hour24 + 1 : hour24;
+            const endMins = mins === '30' ? '30' : '00';
+            const endTime = `20260518T${String(endHour + 1).padStart(2,'0')}${endMins}00`;
+
+            const icsContent = [
+                'BEGIN:VCALENDAR',
+                'VERSION:2.0',
+                'BEGIN:VEVENT',
+                `DTSTART:${startTime}`,
+                `DTEND:${endTime}`,
+                'SUMMARY:Climbing Session - Wall Crushing 102',
+                'DESCRIPTION:Time to crush blacks! Bring chalk and good vibes.',
+                'END:VEVENT',
+                'END:VCALENDAR'
+            ].join('\n');
+
+            const blob = new Blob([icsContent], { type: 'text/calendar' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'climbing-monday.ics';
+            a.click();
+            URL.revokeObjectURL(url);
+
+            // Short delay then open Messages
+            setTimeout(() => {
+                window.location.href = `sms:+16089825259&body=${encodeURIComponent(message)}`;
+            }, 500);
+        }
+
+        // Confetti effect
+        function confetti() {
+            for (let i = 0; i < 50; i++) {
+                const confetto = document.createElement('div');
+                confetto.style.position = 'fixed';
+                confetto.style.left = Math.random() * 100 + 'vw';
+                confetto.style.top = '-10px';
+                confetto.style.fontSize = '20px';
+                confetto.textContent = ['🎉', '🧗', '💪', '⭐', '🔥'][Math.floor(Math.random() * 5)];
+                confetto.style.animation = `fall ${Math.random() * 3 + 2}s linear forwards`;
+                confetto.style.animationDelay = Math.random() * 0.5 + 's';
+                document.body.appendChild(confetto);
+                setTimeout(() => confetto.remove(), 4000);
+            }
+        }
+    </script>
+</body>
+</html>
