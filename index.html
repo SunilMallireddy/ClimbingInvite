@@ -638,14 +638,18 @@
                 'END:VCALENDAR'
             ].join('\r\n');
 
-            // Use data URI — works on iOS Safari
+            // Show the send message button and hide time options
+            const popup = document.getElementById('yesPopup');
+            popup.querySelector('.popup-content').innerHTML = `
+                <div class="popup-emoji">🎉🧗🎉</div>
+                <p>LET'S GOOOOO!</p>
+                <p style="font-size: 0.7em; margin-top: 15px; color: #ccc;">Calendar invite downloading...</p>
+                <a href="sms:+16089825259&body=${encodeURIComponent(message)}" class="time-btn" style="display:inline-block; margin-top:25px; text-decoration:none; font-size:1.2em; padding:15px 30px;">📱 Send Text Message</a>
+            `;
+
+            // Download calendar file
             const dataUri = 'data:text/calendar;charset=utf-8,' + encodeURIComponent(icsContent);
             window.open(dataUri);
-
-            // Then open Messages after a delay
-            setTimeout(() => {
-                window.location.href = `sms:+16089825259&body=${encodeURIComponent(message)}`;
-            }, 1500);
         }
 
         // Confetti effect
