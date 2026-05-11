@@ -612,9 +612,30 @@
             noCount++;
         }
 
-        // Send time via iMessage
+        // Map times to .ics filenames
+        const calFiles = {
+            '5:00 PM': 'climbing-500.ics',
+            '5:30 PM': 'climbing-530.ics',
+            '6:00 PM': 'climbing-600.ics',
+            '6:30 PM': 'climbing-630.ics',
+            '7:00 PM': 'climbing-700.ics',
+            '7:30 PM': 'climbing-730.ics'
+        };
+
+        // Send time via iMessage then show calendar button
         function sendTime(time) {
             const message = `I am in and ${time} works for me`;
+            const calFile = calFiles[time];
+
+            // Show calendar button for when they come back from Messages
+            const popup = document.getElementById('yesPopup');
+            popup.querySelector('.popup-content').innerHTML = `
+                <div class="popup-emoji">🎉🧗🎉</div>
+                <p>Message sent! Now add it to your calendar:</p>
+                <a href="${calFile}" class="time-btn" style="display:inline-block; margin-top:25px; text-decoration:none; font-size:1.1em; padding:15px 30px;">📅 Add to Calendar</a>
+            `;
+
+            // Open Messages
             window.location.href = `sms:+16089825259&body=${encodeURIComponent(message)}`;
         }
 
